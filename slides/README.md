@@ -1,1 +1,1 @@
-please see this repo: https://github.com/quxiaofeng/PolyU_beamer_theme
+please see this two repos: https://github.com/quxiaofeng/PolyU_beamer_theme and https://github.com/matze/mtheme

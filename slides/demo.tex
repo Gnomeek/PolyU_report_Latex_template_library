@@ -1,0 +1,1117 @@
+\documentclass[10pt]{beamer}
+
+%% Based on the original theme by Matthias Vogelgesang
+
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+\usepackage{lipsum}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{subcaption}
+\usepackage{diagbox}
+\usepackage{pgfplots}
+\usepackage{tabularx}
+\usepgfplotslibrary{dateplot}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% UNCC Theme Adjustments %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{CanvasBG}{HTML}{FAFAFA}
+
+% From the official style guide
+\definecolor{UnccGreen}{HTML}{00703C}
+\definecolor{UnccGold}{HTML}{B3A369}
+\definecolor{UnccLightGreen}{HTML}{C3D7A4}
+\definecolor{UnccYellow}{HTML}{F0CB00}
+\definecolor{UnccOrange}{HTML}{F3901D}
+\definecolor{UnccLightYellow}{HTML}{FFF6DC}
+\definecolor{UnccBlue}{HTML}{00728F}
+\definecolor{UnccPink}{HTML}{DE3A6E}
+\definecolor{White}{HTML}{FFFFFF}
+\definecolor{LightGray}{HTML}{DDDDDD}
+
+% Supporting Color Palette
+\definecolor{WarmGray}{HTML}{696158}
+\definecolor{StoneGray}{HTML}{717C7D}
+\definecolor{DarkGreen}{HTML}{2C5234}
+\definecolor{LightGreen}{HTML}{509E2F}
+\definecolor{BrightGold}{HTML}{F0CB00}
+
+% Screamers
+\definecolor{Royal}{HTML}{72246C}
+\definecolor{Ocean}{HTML}{006BA6}
+\definecolor{Flash}{HTML}{B52555}
+\definecolor{Citrus}{HTML}{FFB81C}
+\definecolor{Spring}{HTML}{CEDC00}
+
+% Serenity
+\definecolor{Garden}{HTML}{B7CE95}
+\definecolor{Sand}{HTML}{F0E991}
+\definecolor{Bloom}{HTML}{F1E6B2}
+\definecolor{Clay}{HTML}{B7B09C}
+\definecolor{Cloud}{HTML}{BAC5B9}
+
+% PolyU color schema
+\definecolor{polyured}{RGB}{160,35,55}% PMS 194C RGB #A02337
+\definecolor{polyugrey}{RGB}{128,130,133}% PMS Cool Gray 10C #808285
+\definecolor{polyugold}{RGB}{145,107,74}% PMS 875C RGB #916B4A
+\definecolor{polyusilver}{RGB}{143,143,140}% PMS 877C RGB #8F8F8C
+\definecolor{polyuorange}{RGB}{255,102,0}
+\definecolor{polyuyellow}{RGB}{255,255,204}
+\definecolor{polyuseventyfivered}{RGB}{153,15,61}% CMYK: 0,90,60,40
+\definecolor{polyuseventyfivegrey}{RGB}{102,102,102}% CMYK: 0,0,0,60
+\definecolor{polyuseventyfivegold}{RGB}{230,166,89}% Pantone 722C or CMYK: 10,35,65,0
+\definecolor{polyuseventyfivegoldsecond}{RGB}{230,166,89}% Pantone 874C
+\definecolor{polyublue}{RGB}{0,140,215} % COMP
+\definecolor{polyuicyblue}{RGB}{83,195,241} % COMP
+\definecolor{polyugreen}{RGB}{143,195,32} % COMP
+
+% Set colors here
+\newcommand{\MYhref}[3][polyuseventyfivered]{\href{#2}{\color{#1}{#3}}}%
+\setbeamercolor{frametitle}{bg=polyuseventyfivered}
+\setbeamercolor{progress bar}{bg=polyublue, fg=polyuseventyfivered}
+\setbeamercolor{alerted text}{fg=polyuyellow}
+
+\setbeamercolor{block title}{bg=polyuseventyfivered, fg=White}
+\setbeamercolor{block title example}{bg=polyuicyblue, fg=White}
+\setbeamercolor{block title alerted}{bg=polyuorange, fg=White}
+\setbeamercolor{block body}{bg=CanvasBG}
+
+\metroset{titleformat=smallcaps, progressbar=foot}
+
+\makeatletter
+\setlength{\metropolis@progressinheadfoot@linewidth}{2pt}
+\setlength{\metropolis@titleseparator@linewidth}{2pt}
+\setlength{\metropolis@progressonsectionpage@linewidth}{2pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% UNCC Theme Adjustments %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\title{COMP5511 Artificial Intelligence Concepts}
+\subtitle{Comparisons of Neural Network Frameworks}
+% \date{\today}
+\date{}
+\author{Group D}
+\institute{The Hong Kong Polytechnic University}
+\titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
+
+\begin{document}
+\graphicspath{{img/}}
+\maketitle
+
+\begin{frame}{Table of contents}
+  \setbeamertemplate{section in toc}[sections numbered]
+  \tableofcontents%[hideallsubsections]
+\end{frame}
+
+\section[Introduction]{Introduction}
+\begin{frame}{Background}
+Nowadays, the deep neural network models, also called Deep Learning, have already became a significant machine learning methods.\par
+The difficulty of choosing a neural network package may come from hardware level. Besides GPU, there are other different type of accelerators, like FPGA or ASIC(TPU). The different accelerators may limit the choice of neural network frameworks. Other hardware architectures like ARM or RISC-V would also restrict the usage of neural network frameworks.\par
+It is necessary to evaluate them fairly and summarize their pros and cons before making the decision.
+\end{frame}
+
+\begin{frame}{Datasets}
+We use two datasets, i.e. Szeged Weather dataset and MNIST dataset\cite{MNIST}.
+\begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+    % \begin{itemize}
+    %     \item Weather regression
+    %     \item MNIST
+    % \end{itemize}
+    \begin{table}[htb]
+    \centering
+    \scalebox{0.5}{
+    \begin{tabular}{|r|c|c|}
+    \hline
+    Column Id& Attribute Name& Domain\\
+    \hline
+    1&Formatted Date& Text\\
+    \hline
+    2&Summary& Text\\
+    \hline
+    3&Precip Type& Text\\
+    \hline
+    4&Temperature (C)& Number\\
+    \hline
+    5&Apparent Temperature (C)& Number\\
+    \hline
+    6&Humidity& Number\\
+    \hline
+    7&Wind Speed (km/h)& Number\\
+    \hline
+    8&Wind Bearing (degrees)& Number\\
+    \hline
+    9&Visibility (km)& Number \\
+    \hline
+    10&Loud Cover& Number\\
+    \hline
+    11&Pressure (millibars)& Number\\
+    \hline
+    12&Daily Summary& Text\\
+    \hline
+    \end{tabular}}
+    \caption{Szeged Weather dataset}
+    \label{ch.t0}
+    \end{table}
+    \column{0.5\textwidth}
+    \begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.5]{mnist.png}
+    \caption{MNIST dataset}
+    \label{ch1.mnist}
+    \end{figure}
+\end{columns}    
+\end{frame}
+
+\section[Frameworks]{Frameworks}
+\begin{frame}{frameworks and models}
+\begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+    Frameworks
+    \begin{itemize}
+        \item TensorFlow
+        \item Keras
+        \item Scikit-learn
+        \item PyTorch
+    \end{itemize}
+    \column{0.5\textwidth}
+    Models
+    \begin{itemize}
+        \item CNN
+        \item MLP
+        \item MLP.Regression
+    \end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{TensorFlow}
+TensorFlow is an open source library, which is developed by Google, for implementing machine learning. It can support multiple languages like python, java, JavaScript, Go and C etc.\par
+\textbf{Why TensorFlow?}
+\begin{itemize}
+    \item TensorFlow helps to ease the process of training models, acquiring data, serving predictions and refining future results
+    \item A few lines codes to build a learning model
+    \item TensorFlow makes machine learning and deep learning models and algorithms useful by way of a common metaphor through bundles them  together
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Keras}
+Keras is an easy-to-learn high-level Python library based on TensorFlow (or Theano or CNTK) for deep learning. It allows artificial intelligence engineers to focus on the main functions of deep learning.\par
+\textbf{Why Keras?}\par
+\begin{itemize}
+    \item Efficiently executing low-level tensor operations on CPU, GPU.
+    \item Can be programmed based on different deep learning backends, such as TensorFlow, CNTK and Theano.
+    \item Compared with other frameworks, Keras can be widely deployed on a wider range of platforms.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Scikit-learn}
+Scikit-learn is integrating a wide range of machine learning algorithms for dealing with medium-size supervised and unsupervised problems based on Python module. It was started as a Google Summer of code project by David Cournapeau in 2007.\par
+\textbf{Why Scikit-learn?}\par
+\begin{itemize}
+    \item Scikit-learn to give more machine learning function's API or achieved classes model to non-specialists.
+    \item Scikit-learn package can provide most normal and popular algorithms to implement the machine learning such as  SVM, KNN, SVR, etc.
+    \item Scikit-learn is built on Numpy, Scipy, and Matplotlib.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{PyTorch}
+PyTorch is an open-source machine learning library based on Torch library, used for applications such as computer vision and natural language processing. The predecessor of PyTorch is Torch which is a pure C++ framework. The PyTorch is mainly maintained by Facebook's AI Research Lab(FAIR), which ensures the PyTorch library can get continuously support and improvement.\par
+\textbf{Why PyTorch?}\par
+\begin{itemize}
+\item Easily to get start
+\item PyTorch is a quite simple and efficient framework for neural network
+\item Its design obeys  human thought, which makes users can focus on their ideas rather than the details of implementation
+\end{itemize}
+\end{frame}
+
+\begin{frame}{CNN}
+    \begin{figure}[ht!]
+	\centering
+	\scalebox{0.7}{
+	\begin{tikzpicture}
+		\node at (0.5,-1){\begin{tabular}{c}MINST image\\28×28\end{tabular}};
+		
+		\draw (0,0) -- (1,0) -- (1,1) -- (0,1) -- (0,0);
+		
+		\node at (3,3.5){\begin{tabular}{c}convolutional layer\\16 features\\kernal 5×5\\relu\end{tabular}};
+		
+		\draw[fill=black,opacity=0.2,draw=black] (2.75,1.25) -- (3.75,1.25) -- (3.75,2.25) -- (2.75,2.25) -- (2.75,1.25);
+		\draw[fill=black,opacity=0.2,draw=black] (2.5,1) -- (3.5,1) -- (3.5,2) -- (2.5,2) -- (2.5,1);
+		\draw[fill=black,opacity=0.2,draw=black] (2.25,0.75) -- (3.25,0.75) -- (3.25,1.75) -- (2.25,1.75) -- (2.25,0.75);
+		\draw[fill=black,opacity=0.2,draw=black] (2,0.5) -- (3,0.5) -- (3,1.5) -- (2,1.5) -- (2,0.5);
+		\draw[fill=black,opacity=0.2,draw=black] (1.75,0.25) -- (2.75,0.25) -- (2.75,1.25) -- (1.75,1.25) -- (1.75,0.25);
+		\draw[fill=black,opacity=0.2,draw=black] (1.5,0) -- (2.5,0) -- (2.5,1) -- (1.5,1) -- (1.5,0);
+		
+		\node at (4.5,-1){\begin{tabular}{c}maxpool layer\\2×2\end{tabular}};
+		
+		\draw[fill=black,opacity=0.2,draw=black] (5,1.25) -- (5.75,1.25) -- (5.75,2) -- (5,2) -- (5,1.25);
+		\draw[fill=black,opacity=0.2,draw=black] (4.75,1) -- (5.5,1) -- (5.5,1.75) -- (4.75,1.75) -- (4.75,1);
+		\draw[fill=black,opacity=0.2,draw=black] (4.5,0.75) -- (5.25,0.75) -- (5.25,1.5) -- (4.5,1.5) -- (4.5,0.75);
+		\draw[fill=black,opacity=0.2,draw=black] (4.25,0.5) -- (5,0.5) -- (5,1.25) -- (4.25,1.25) -- (4.25,0.5);
+		\draw[fill=black,opacity=0.2,draw=black] (4,0.25) -- (4.75,0.25) -- (4.75,1) -- (4,1) -- (4,0.25);
+		\draw[fill=black,opacity=0.2,draw=black] (3.75,0) -- (4.5,0) -- (4.5,0.75) -- (3.75,0.75) -- (3.75,0);
+		
+		\node at (7,3.5){\begin{tabular}{c}convolutional layer\\32 features\\kernal 5×5\\relu\end{tabular}};
+		
+		\draw[fill=black,opacity=0.2,draw=black] (7.5,1.75) -- (8.25,1.75) -- (8.25,2.5) -- (7.5,2.5) -- (7.5,1.75);
+		\draw[fill=black,opacity=0.2,draw=black] (7.25,1.5) -- (8,1.5) -- (8,2.25) -- (7.25,2.25) -- (7.25,1.5);
+		\draw[fill=black,opacity=0.2,draw=black] (7,1.25) -- (7.75,1.25) -- (7.75,2) -- (7,2) -- (7,1.25);
+		\draw[fill=black,opacity=0.2,draw=black] (6.75,1) -- (7.5,1) -- (7.5,1.75) -- (6.75,1.75) -- (6.75,1);
+		\draw[fill=black,opacity=0.2,draw=black] (6.5,0.75) -- (7.25,0.75) -- (7.25,1.5) -- (6.5,1.5) -- (6.5,0.75);
+		\draw[fill=black,opacity=0.2,draw=black] (6.25,0.5) -- (7,0.5) -- (7,1.25) -- (6.25,1.25) -- (6.25,0.5);
+		\draw[fill=black,opacity=0.2,draw=black] (6,0.25) -- (6.75,0.25) -- (6.75,1) -- (6,1) -- (6,0.25);
+		\draw[fill=black,opacity=0.2,draw=black] (5.75,0) -- (6.5,0) -- (6.5,0.75) -- (5.75,0.75) -- (5.75,0);
+		
+		\node at (9.5,-1){\begin{tabular}{c}maxpool layer\\2×2\end{tabular}};
+		
+		\draw[fill=black,opacity=0.2,draw=black] (10,1.75) -- (10.5,1.75) -- (10.5,2.25) -- (10,2.25) -- (10,1.75);
+		\draw[fill=black,opacity=0.2,draw=black] (9.75,1.5) -- (10.25,1.5) -- (10.25,2) -- (9.75,2) -- (9.75,1.5);
+		\draw[fill=black,opacity=0.2,draw=black] (9.5,1.25) -- (10,1.25) -- (10,1.75) -- (9.5,1.75) -- (9.5,1.25);
+		\draw[fill=black,opacity=0.2,draw=black] (9.25,1) -- (9.75,1) -- (9.75,1.5) -- (9.25,1.5) -- (9.25,1);
+		\draw[fill=black,opacity=0.2,draw=black] (9,0.75) -- (9.5,0.75) -- (9.5,1.25) -- (9,1.25) -- (9,0.75);
+		\draw[fill=black,opacity=0.2,draw=black] (8.75,0.5) -- (9.25,0.5) -- (9.25,1) -- (8.75,1) -- (8.75,0.5);
+		\draw[fill=black,opacity=0.2,draw=black] (8.5,0.25) -- (9,0.25) -- (9,0.75) -- (8.5,0.75) -- (8.5,0.25);
+		\draw[fill=black,opacity=0.2,draw=black] (8.25,0) -- (8.75,0) -- (8.75,0.5) -- (8.25,0.5) -- (8.25,0);
+		
+		\node at (12,3.5){\begin{tabular}{c}fully connected layer\\128 nodes\\relu\end{tabular}};
+		
+		\draw[fill=black,draw=black,opacity=0.5] (10.5,0) -- (11,0) -- (12.5,1.75) -- (12,1.75) -- (10.5,0);
+		
+		\node at (13,-1){\begin{tabular}{c}output layer 10 nodes\\softmax\end{tabular}};
+		
+		\draw[fill=black,draw=black,opacity=0.5] (12.5,0.5) -- (13,0.5) -- (13.65,1.25) -- (13.15,1.25) -- (12.5,0.5);
+	\end{tikzpicture}}
+	\caption{CNN with crossentropy loss function and adam optimizer for MNIST dataset}
+	\label{ch.f2}
+\end{figure}
+CNN\cite{CNN} with two convolutional layers, and both of them follow by a max pooling layer. The first fully connective layer owns 128 units, and the output layer has 10 units.
+\end{frame}
+
+\begin{frame}{MLP}
+    \begin{figure}[ht!]
+	\centering
+	\scalebox{0.7}{
+    \begin{tikzpicture}[shorten >=1pt]
+        \tikzstyle{unit}=[draw,shape=circle,minimum size=1.15cm]
+        \node at (0.5,0.75){\begin{tabular}{c}MINST image\\28×28\end{tabular}};
+		
+        \draw (0,1.5) -- (1,1.5) -- (1,2.5) -- (0,2.5) -- (0,1.5);
+        
+        \node[unit](x0) at (3,3.5){$x_1$};
+        \node[unit](x1) at (3,2){$x_2$};
+        \node(dots) at (3,1){\vdots};
+        \node[unit](x728) at (3,0){$x_{728}$};
+ 
+        \node[unit](h1) at (6,2.5){$h_1$};
+        \node(dots) at (6,1.5){\vdots};
+        \node[unit](h512) at (6,0.5){$h_{512}$};
+
+        \node[unit](h2_1) at (9,2.5){$h_1$};
+        \node(dots) at (9,1.5){\vdots};
+        \node[unit](h2_256) at (9,0.5){$h_{256}$};
+
+        \node[unit](y1) at (12,2.5){$y_1$};
+        \node(dots) at (12,1.5){\vdots};
+        \node[unit](y10) at (12,0.5){$y_{10}$};
+ 
+        \draw[->] (1,2) -- (x0);
+        \draw[->] (1,2) -- (x1);
+        \draw[->] (1,2) -- (x728);
+        
+        \draw[->] (x0) -- (h1);
+        \draw[->] (x0) -- (h512);
+ 
+        \draw[->] (x1) -- (h1);
+        \draw[->] (x1) -- (h512);
+ 
+        \draw[->] (x728) -- (h1);
+        \draw[->] (x728) -- (h512);
+        
+        \draw[->] (h1) -- (h2_1);
+        \draw[->] (h1) -- (h2_256);
+ 
+        \draw[->] (h512) -- (h2_1);
+        \draw[->] (h512) -- (h2_256);
+        
+        \draw[->] (h2_1) -- (y1);
+        \draw[->] (h2_1) -- (y10);
+ 
+        \draw[->] (h2_256) -- (y1);
+        \draw[->] (h2_256) -- (y10);
+ 
+        \draw [decorate,decoration={brace,amplitude=10pt},xshift=-4pt,yshift=0pt] (2.5,4) -- (3.75,4) node [black,midway,yshift=+0.6cm]{input×728};
+        \draw [decorate,decoration={brace,amplitude=10pt},xshift=-4pt,yshift=0pt] (5.5,3) -- (6.75,3) node [black,midway,yshift=+0.6cm]{hidden×512};
+        \draw [decorate,decoration={brace,amplitude=10pt},xshift=-4pt,yshift=0pt] (8.5,3) -- (9.75,3) node [black,midway,yshift=+0.6cm]{hidden×256};
+        \draw [decorate,decoration={brace,amplitude=10pt},xshift=-4pt,yshift=0pt] (11.5,3) -- (12.75,3) node [black,midway,yshift=+0.6cm]{output×10};
+    \end{tikzpicture}}
+    \caption{MLP with crossentropy loss function and adam optimizer for MNIST dataset}
+    \label{ch.f3}
+\end{figure}
+In the experiment, the MLP\cite{noriega2005multilayer} models is a 3 layers neural network model, where the amount of units for input, the first hidden layer, the second hidden layer and the output layer are 728, 512, 256 and 10 separately.
+\end{frame}
+
+\begin{frame}{MLP.Regression}
+   \begin{figure}[ht!]
+	\centering
+	\scalebox{0.7}{
+    \begin{tikzpicture}[shorten >=1pt]
+        \tikzstyle{unit}=[draw,shape=circle,minimum size=1.15cm]
+        \node at (0.5,1.5){\begin{tabular}{c}weather data\end{tabular}};
+		
+   
+        \node[unit](x1) at (3,2.5){$x_1$};
+        \node(dots) at (3,1.5){\vdots};
+        \node[unit](x10) at (3,0.5){$x_{12}$};
+        
+        \node[unit](h1) at (6,3.5){$h_1$};
+        \node[unit](h2) at (6,2){$h_2$};
+        \node(dots) at (6,1){\vdots};
+        \node[unit](h512) at (6,0){$h_{512}$};
+        
+        \node[unit](h2_1) at (9,3.5){$h_1$};
+        \node[unit](h2_2) at (9,2){$h_2$};
+        \node(dots) at (9,1){\vdots};
+        \node[unit](h2_256) at (9,0){$h_{256}$};
+ 
+        \node[unit](y1) at (12,1.5){$y_1$};
+ 
+        \draw[->] (1.5,2.5) -- (x1);
+        \draw[->] (1.5,0.5) -- (x10);
+        
+        \draw[->] (x1) -- (h1);
+        \draw[->] (x1) -- (h2);
+        \draw[->] (x1) -- (h512);
+ 
+        \draw[->] (x10) -- (h1);
+        \draw[->] (x10) -- (h2);
+        \draw[->] (x10) -- (h512);
+        
+        \draw[->] (h1) -- (h2_1);
+        \draw[->] (h1) -- (h2_2);
+        \draw[->] (h1) -- (h2_256);
+ 
+        \draw[->] (h2) -- (h2_1);
+        \draw[->] (h2) -- (h2_2);
+        \draw[->] (h2) -- (h2_256);
+        
+        \draw[->] (h512) -- (h2_1);
+        \draw[->] (h512) -- (h2_2);
+        \draw[->] (h512) -- (h2_256);
+        
+        \draw[->] (h2_1) -- (y1);
+        
+        \draw[->] (h2_2) -- (y1);
+ 
+        \draw[->] (h2_256) -- (y1);
+ 
+        \draw [decorate,decoration={brace,amplitude=10pt},xshift=-4pt,yshift=0pt] (2.5,3) -- (3.75,3) node [black,midway,yshift=+0.6cm]{input×12};
+        \draw [decorate,decoration={brace,amplitude=10pt},xshift=-4pt,yshift=0pt] (5.5,4) -- (6.75,4) node [black,midway,yshift=+0.6cm]{hidden×512};
+        \draw [decorate,decoration={brace,amplitude=10pt},xshift=-4pt,yshift=0pt] (8.5,4) -- (9.75,4) node [black,midway,yshift=+0.6cm]{hidden×256};
+        \draw [decorate,decoration={brace,amplitude=10pt},xshift=-4pt,yshift=0pt] (11.5,2) -- (12.75,2) node [black,midway,yshift=+0.6cm]{output};
+    \end{tikzpicture}}
+    \caption{MLP Regression with MSE loss function and adam optimizer for MNIST dataset}
+    \label{ch.f4}
+    \end{figure} 
+    Similar to the MLP model in the MNIST classification task.\par
+    Compared with the MLP model in the classification task, the input layer and output layer only have 12 and 1 units separately.
+\end{frame}
+
+\section[Comparisons]{Comparisons}
+
+\begin{frame}{Comparison rubrics}
+\begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+    \begin{itemize}
+        \item Performance
+        \item Weight Initialization
+        \item Activation/Loss function Coverage
+        \item Optimization methods Coverage
+    \end{itemize}
+    \column{0.5\textwidth}
+    \begin{itemize}
+        \item Hardware/Platform support
+        \item Language support
+        \item Usability
+        \item Activity of Packages
+    \end{itemize}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Performance on CPU}
+\begin{columns}[b,onlytextwidth]
+    \column{0.5\textwidth}
+    \pgfplotstableread[row sep=\\,col sep=&]{
+    package & CNN_MINST & MLP_MINST & MLP_R \\
+    TensorFlow		& 86072 & 45777  & 24765  \\
+    Keras			& 44032 & 10370  & 31511  \\
+    PyTorch    		& 94952 & 18377 & 95514 \\
+    Scikit-learn   	&  0& 72879 & 436339 \\
+    }\codeline
+    \begin{figure}[h!]
+    \centering
+    \scalebox{0.4}{\begin{tikzpicture}
+        \begin{axis}[
+                x tick label style={/pgf/number format/1000 sep=},
+                ybar,
+                width=\textwidth,
+                height=13cm,
+                legend style={at={(0.5,1)},
+                    anchor=north,legend columns=-1},
+                symbolic x coords={TensorFlow, Keras, PyTorch,Scikit-learn},
+                xtick=data,
+                ylabel={TIME /millisecond},
+                nodes near coords align={vertical},
+                nodes near coords,
+                every node near coord/.append style={font=\small},
+                ymin=0,
+                clip = false,
+                x = 3cm,
+                bar width = 0.5cm,
+            ]
+            \addplot table[x=package,y=CNN_MINST]{\codeline};
+            \addplot table[x=package,y=MLP_MINST]{\codeline};
+            \addplot table[x=package,y=MLP_R]{\codeline};
+            \legend{CNN MINST, MLP MINST, MLP REGRESSION}
+        \end{axis}
+    \end{tikzpicture}}
+    \caption{Training time on CPU}
+    \label{TRAIN_cpu}
+    \end{figure}
+
+    \column{0.5\textwidth}
+    \pgfplotstableread[row sep=\\,col sep=&]{
+    package & CNN_MINST & MLP_MINST & MLP_R \\
+    TensorFlow		& 547 & 452  & 34  \\
+    Keras			& 823 & 239  & 305  \\
+    PyTorch    		& 823 & 57 & 42 \\
+    Scikit-learn   	&  0& 253 & 658\\
+    }\codeline
+
+\begin{figure}[h!]
+\centering
+\scalebox{0.4}{\begin{tikzpicture}
+    \begin{axis}[
+            ybar,
+            width=\textwidth,
+            height=8cm,
+            legend style={at={(0.5,1)},
+                anchor=north,legend columns=-1},
+            symbolic x coords={TensorFlow, Keras, PyTorch,Scikit-learn},
+            xtick=data,
+            ylabel={TIME /millisecond},
+            nodes near coords align={vertical},
+            nodes near coords,
+            x = 3cm,
+            bar width = 0.5cm,
+            ymin=0,ymax=1000
+        ]
+        \addplot table[x=package,y=CNN_MINST]{\codeline};
+        \addplot table[x=package,y=MLP_MINST]{\codeline};
+        \addplot table[x=package,y=MLP_R]{\codeline};
+        \legend{CNN MINST, MLP MINST, MLP REGRESSION}
+    \end{axis}
+\end{tikzpicture}}
+\caption{Prediction time on CPU}
+\label{PREDICTION_cpu}
+\end{figure}
+\end{columns} 
+    Keras has the shortest training time with relatively highest prediction time. Notably, Scikit-learn doesn't support CNN. The performance of PyTorch is between Keras and TensorFlow.
+\end{frame}
+
+\begin{frame}{Performance on GPU}
+\begin{columns}[b,onlytextwidth]
+    \column{0.5\textwidth}
+\pgfplotstableread[row sep=\\,col sep=&]{
+    package & CNN_MNIST & MLP_MNIST & MLP_R \\
+    TensorFlow		& 14901 & 38490  & 49627  \\
+    Keras			& 11989 & 6891  & 69749  \\
+    PyTorch    		& 12497 & 4860 & 54677 \\
+    }\codeline
+
+\begin{figure}[h!]
+\setlength{\belowcaptionskip}{0.1cm}
+\centering
+\scalebox{0.4}{
+\begin{tikzpicture}
+    \begin{axis}[
+            ybar,
+            width=\textwidth,
+            height=7cm,
+            legend style={at={(0.5,1)},
+                anchor=north,legend columns=-1},
+            symbolic x coords={TensorFlow, Keras, PyTorch},
+            xtick=data,
+            ylabel={TIME /millisecond},
+            nodes near coords align={vertical},
+            nodes near coords,
+            bar width = 20pt,
+            ymin=0,ymax=90000,
+            x = 4.5cm,
+            bar width = 0.4cm,
+            every node near coord/.append style={font=\small},
+        ]
+        \addplot table[x=package,y=CNN_MNIST]{\codeline};
+        \addplot table[x=package,y=MLP_MNIST]{\codeline};
+        \addplot table[x=package,y=MLP_R]{\codeline};
+        \legend{CNN MNIST, MLP MNIST, MLP REGRESSION}
+    \end{axis}
+\end{tikzpicture}}
+\caption{Training time on GPU(Scikit-learn cannot support GPU)}
+\label{TRAIN_gpu}
+\end{figure}
+    \column{0.5\textwidth}
+\pgfplotstableread[row sep=\\,col sep=&]{
+    package & CNN_MNIST & MLP_MNIST & MLP_R \\
+    TensorFlow		& 441 & 39  & 6  \\
+    Keras			& 357 & 240  & 347  \\
+    PyTorch    		& 357 & 4 & 1 \\
+    }\codeline
+
+\begin{figure}[h!]
+\centering
+\scalebox{0.5}{
+\begin{tikzpicture}
+    \begin{axis}[
+            ybar,
+            width=\textwidth,
+            height=5.7cm,
+            legend style={at={(0.5,1)},
+                anchor=north,legend columns=-1},
+            symbolic x coords={TensorFlow, Keras, PyTorch},
+            xtick=data,
+            ylabel={TIME /millisecond},
+            nodes near coords align={vertical},
+            nodes near coords,
+            ymin=0,ymax=600,
+            x = 4.5cm,
+            bar width = 0.4cm,
+        ]
+        \addplot table[x=package,y=CNN_MNIST]{\codeline};
+        \addplot table[x=package,y=MLP_MNIST]{\codeline};
+        \addplot table[x=package,y=MLP_R]{\codeline};
+        \legend{CNN MNIST, MLP MNIST, MLP REGRESSION}
+    \end{axis}
+\end{tikzpicture}}
+\caption{Prediction time on GPU}
+\label{PREDICTION_gpu}
+\end{figure}
+\end{columns}
+    Within the same data and neural network model, the performance of different packages show on above the figures.
+    \par TensorFlow and Keras have the balanced good performance in training time on CPU and GPU.
+    \par Scikit-learn has the worst time complexity among four packages.
+\end{frame}
+
+\begin{frame}{Weight Initialization}
+\pgfplotstableread[row sep=\\,col sep=&]{
+    framework & count \\
+    TensorFlow		& 17  \\
+    Keras			& 15   \\
+    PyTorch    		& 13 \\
+    Scikit-learn   	&  0 \\
+    }\codeline
+
+\begin{figure}[h!]
+\centering
+\scalebox{0.8}{\begin{tikzpicture}
+    \begin{axis}[
+            xbar,
+            width=\textwidth,
+            height=15cm,
+            legend style={at={(0.5,0.5)},
+                anchor=north,legend columns=-1},
+            symbolic y coords={TensorFlow, Keras, PyTorch,Scikit-learn},
+            ytick=data,
+            % yticklabels={Test A,Test B,Test C,Test D}
+            xlabel={num of initialization functions},
+            nodes near coords align={horizontal},
+            nodes near coords,
+            every node near coord/.append style={font=\small},
+            % enlarge y limits=true,
+            % enlargelimits=0.15,
+            xmin=0,
+            xmax=18,
+            y=0.7cm,
+            % bar width = 8pt,
+            clip = false,
+            % bar shift = 5pt,
+        ]
+        \addplot table[y=framework,x=count]{\codeline};
+    \end{axis}
+\end{tikzpicture}}
+\caption{Number of initialization functions}
+\label{initialization}
+\end{figure}
+In particular, Scikit-learn does not provide any initialization method, it initial the weights randomly.
+\end{frame}
+
+\begin{frame}{Activation/Loss function Coverage and Optimization methods Coverage}
+\begin{columns}[b,onlytextwidth]
+    \column{0.5\textwidth}
+\pgfplotstableread[row sep=\\,col sep=&]{
+    interval & act.Func. & carD & carR \\
+    TensorFlow		& 11 & 0.1  & 0.2  \\
+    Keras			& 11 & 3.8  & 4.9  \\
+    PyTorch    		& 23 & 10.4 & 13.4 \\
+    Scikit-learn   	& 4  & 17.3 & 22.2 \\
+    }\actFunc
+\begin{figure}[htb]
+\centering
+\scalebox{0.8}{\begin{tikzpicture}
+    \begin{axis}[
+            xbar,
+            width=\textwidth,
+            height=15cm,
+            legend style={at={(0.5,0.5)},
+                anchor=north,legend columns=-1},
+            symbolic y coords={TensorFlow, Keras, PyTorch,Scikit-learn},
+            ytick=data,
+            xlabel={Amount of Act. Func.},
+            nodes near coords align={horizontal},
+            nodes near coords,
+            every node near coord/.append style={font=\small},
+            % enlarge y limits=true,
+            % enlargelimits=0.15,
+            xmin=0,
+            xmax=25,
+            y=0.7cm,
+            % bar width = 8pt,
+            clip = false,
+            % bar shift = 5pt,
+            ylabel={},
+        ]
+        \addplot table[y=interval,x=act.Func.]{\actFunc};
+    \end{axis}
+\end{tikzpicture}}
+\caption{Activation/Loss function Coverage}
+\label{toi}
+\end{figure}
+    \column{0.5\textwidth}
+ \pgfplotstableread[row sep=\\,col sep=&]{
+    interval & opt.Func. & carD & carR \\
+    TensorFlow		& 11 & 0.1  & 0.2  \\
+    Keras			& 7 & 3.8  & 4.9  \\
+    PyTorch    		& 11 & 10.4 & 13.4 \\
+    Scikit-learn   	& 3  & 17.3 & 22.2 \\
+    }\actFunc
+\begin{figure}[h]
+\centering
+\scalebox{0.8}{\begin{tikzpicture}
+    \begin{axis}[
+            xbar,
+            width=\textwidth,
+            height=15cm,
+            legend style={at={(0.5,0.5)},
+                anchor=north,legend columns=-1},
+            symbolic y coords={TensorFlow, Keras, PyTorch,Scikit-learn},
+            ytick=data,
+            xlabel={Amount of Opt. Func.},
+            nodes near coords align={horizontal},
+            nodes near coords,
+            every node near coord/.append style={font=\small},
+            % enlarge y limits=true,
+            % enlargelimits=0.15,
+            xmin=0,
+            xmax=15,
+            y=0.7cm,
+            % bar width = 8pt,
+            clip = false,
+            % bar shift = 5pt,
+            ylabel={},
+        ]
+        \addplot table[y=interval,x=opt.Func.]{\actFunc};
+    \end{axis}
+\end{tikzpicture}}
+\caption{Optimization methods Coverage}
+\label{toi}
+\end{figure}
+\end{columns}
+    PyTorch has 23 different activation/loss functions, so the PyTorch has better diversity to build neural network.
+    \par And it also has 11 different optimization methods, that means it also has wonderful ability of converging data. 
+\end{frame}
+
+\begin{frame}{Hardware support}
+
+\begin{table}[h!]
+\begin{center}
+\scalebox{0.7}{
+\begin{tabular}[htb]{lccccccc}
+\toprule  
+Frameworks & AArch64/ARM & ppc64le/Power Architecture(IBM) & x86 \\
+\midrule
+TensorFlow  & Yes & Yes & Yes  \\
+Keras  & Yes & Yes & Yes  \\
+Scikit-learn & Yes (official support) & Yes (official support) & Yes (official support)  \\
+PyTorch & Yes (official support) & Yes (official support) & Yes (official support)   \\
+\bottomrule
+\end{tabular}}
+\caption{Hardware support status}
+\label{tab: hss}
+\end{center}
+\end{table}
+
+\begin{table}[h!]
+\begin{center}
+\scalebox{0.7}{\begin{tabular}[htb]{lccccccc}
+\toprule  
+Frameworks & RISC.V & ASIC & FPGA & GPU \\
+\midrule
+TensorFlow  & Yes & Yes & No & Yes\\
+Keras    & Yes & Yes & No & Yes\\
+Scikit-learn & Yes (LAPAC and gfortran are needed) & No & Yes & No  \\
+PyTorch & Yes (Recompile with LLVM > 9.0) & Exist solution & Exist solution &  Yes (CUDA)  \\
+\bottomrule
+
+\end{tabular}}
+\caption{Hardware support status Cont.}
+\label{tab: hsscont}
+\end{center}
+\end{table}
+   All the packages are satisfied running on CPU.
+   Scikit-learn does not support ASIC and GPU. 
+   TensorFlow and Keras do not support FPGA.
+\end{frame}
+
+\begin{frame}{Platform/Language support}
+\begin{columns}[b, onlytextwidth]
+    \column{0.5\textwidth}
+    \begin{table}[h!]
+    \begin{center}
+    \scalebox{0.6}{\begin{tabular}[htb]{lcc}
+    \toprule  
+    Platform & Hadoop  & Spark  \\
+    \midrule
+    TensorFlow  & \checkmark & \checkmark  \\
+    Keras   & \checkmark & \checkmark  \\
+    PyTorch     & \checkmark & \checkmark   \\
+    Scikit-learn  & \checkmark &  \\
+    \bottomrule
+    
+    \end{tabular}}
+    \caption{platform support}
+    \label{tab:ps3.5.2}
+    \end{center}
+    \end{table}
+    
+    \column{0.5\textwidth}
+    
+    \begin{table}[h!]
+    \begin{center}
+    \scalebox{0.6}{
+    \begin{tabular}[htb]{lccccccc}
+    \toprule  
+    Library & Python  & Java  & C  & Go  & Js  & R & C++  \\
+    \midrule
+    TensorFlow  & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+    Keras  & \checkmark &  &  &  &  & \checkmark  & \\
+    PyTorch  & \checkmark & \checkmark &  &  &  &   & \checkmark\\
+    Scikit-learn  & \checkmark &  &  &  &  &   \\
+    \bottomrule
+    \end{tabular}}
+    \caption{language support}
+    \end{center}
+    \end{table}
+\end{columns}
+    To sum up, TensorFlow is best in the Language support part, We can use 5 kind of language to call it.\par Scikit-learn is worst, can only used by python. \par
+    Besides python, Keras can use R, PyTorch and use C++ and Java.\par
+\end{frame}
+
+\begin{frame}{Usability}
+\pgfplotstableread[row sep=\\,col sep=&]{
+    interval & TensorFlow & Keras & PyTorch & Scikit-learn \\
+    MLP      & 34 & 28  & 29 & 12 \\
+    CNN           & 51 & 21 &39 & 0  \\
+    MLP.Reg         & 57 & 9 & 34 & 14 \\
+    }\codeline
+
+\begin{figure}[htb]
+\centering
+\scalebox{0.6}{\begin{tikzpicture}
+    \begin{axis}[
+            ybar,
+            x = 3.5cm,
+            bar width=.5cm,
+            width=\textwidth,
+            height=7cm,
+            legend style={at={(0.5,1)},
+                anchor=north,legend columns=-1},
+            symbolic x coords={MLP,CNN,MLP.Reg},
+            xtick=data,
+            nodes near coords,
+            every node near coord/.append style={font=\small},
+            nodes near coords align={vertical},
+            ymin=0,ymax=65,
+            x = 6cm,
+            bar width = 0.5cm,
+        ]
+        \addplot table[x=interval,y=TensorFlow]{\codeline};
+        \addplot table[x=interval,y=Keras]{\codeline};
+        \addplot table[x=interval,y=PyTorch]{\codeline};
+        \addplot table[x=interval,y=Scikit-learn]{\codeline};
+        \legend{TensorFlow, Keras, PyTorch, Scikit-learn}
+    \end{axis}
+\end{tikzpicture}}
+\caption{Code lines for construct the same structure neural network for four packages}
+\label{3.7.1}
+\end{figure}
+    From the picture, Scikit-learn has the less amount of code lines, that means it more friendly to novices.\par
+    Novices will meet more questions when they use TensorFlow at the beginning of study.
+\end{frame}
+
+\begin{frame}{Activity of Packages}
+% \begin{columns}[b]
+%     \column{0.5\textwidth}
+    \pgfplotstableread[row sep=\\,col sep=&]{
+        interval & closed & open & total \\
+        TensorFlow      & 25210 & 3966  & 29176 \\
+        Keras           & 7211 & 3119  & 10330  \\
+        PyTorch         & 12206 & 5294 & 17500 \\
+        Scikit-learn    & 6546  & 1553 & 8099 \\
+        }\interaction
+    \begin{figure}[htb]
+    \centering
+    \scalebox{0.6}{
+    \begin{tikzpicture}
+    \begin{axis}[
+                ybar,
+                x = 3.5cm,
+                bar width=.5cm,
+                width=\textwidth,
+                height=7cm,
+                legend style={at={(0.5,1)},
+                    anchor=north,legend columns=-1},
+                symbolic x coords={TensorFlow, Keras, PyTorch, Scikit-learn},
+                xtick=data,
+                nodes near coords,
+                nodes near coords align={vertical},
+                ymin=0,ymax=35000,
+       %         ylabel={Total amount of open and closed issues},
+            ]
+            \addplot table[x=interval,y=closed]{\interaction};
+            \addplot table[x=interval,y=open]{\interaction};
+            \addplot table[x=interval,y=total]{\interaction};
+            \legend{Closed, Open, Closed + Open}
+        \end{axis}
+    \end{tikzpicture}
+    }
+    \caption{Total amount of open and closed issues for four packages (up to Dec, 2020)}
+    \label{3.8.1}
+    \end{figure}
+    Total amount of open and closed issues represents a package's sustainability and usability.\par
+    TensorFlow and PyTorch can provide more solutions to novices.
+\end{frame}
+
+\begin{frame}{Activity of Packages Cont.}
+    % \column{0.5\textwidth}
+    \pgfplotstableread[row sep=\\,col sep=&]{
+        interval & closed & open & total \\
+        TensorFlow      & 469 & 302  & 771 \\
+        Keras           & 3 & 22  & 25  \\
+        PyTorch         & 323 & 298 & 621 \\
+        Scikit-learn    & 65  & 43 & 108 \\
+        }\montlyinteraction
+    \begin{figure}[htb]
+    \centering
+    \scalebox{0.6}{
+    \begin{tikzpicture}
+    \begin{axis}[
+                ybar,
+                x = 3.5cm,
+                bar width=.5cm,
+                width=\textwidth,
+                height=7cm,
+                legend style={at={(0.5,1)},
+                    anchor=north,legend columns=-1},
+                symbolic x coords={TensorFlow, Keras, PyTorch, Scikit-learn},
+                xtick=data,
+                nodes near coords,
+                nodes near coords align={vertical},
+                ymin=0,ymax=550,
+       %         ylabel={Total amount of open and closed issues},
+            ]
+            \addplot table[x=interval,y=closed]{\montlyinteraction};
+            \addplot table[x=interval,y=open]{\montlyinteraction};
+            %\addplot table[x=interval,y=total]{\montlyinteraction};
+            \legend{Closed, New}
+        \end{axis}
+    \end{tikzpicture}
+    }
+    \caption{Monthly amount of new and closed issues for four packages(Nov, 2020 - Dec, 2020)}
+    \label{3.8.2}
+    \end{figure}
+    This comparison provides data that can reminds novices to use TensorFlow or PyTorch as soon as possible, because these two packages are activated currently.    
+\end{frame}
+% \end{columns}
+
+
+\begin{frame}{Activity of Packages Cont.}
+\pgfplotstableread[row sep=\\,col sep=&]{
+    interval & authors & master & all \\
+    TensorFlow      & 205 & 1578  & 1677 \\
+    Keras           & 2 & 1  & 2  \\
+    PyTorch         & 269 & 749 & 2181 \\
+    Scikit-learn    & 39  & 73 & 75 \\
+    }\montlyinteraction
+
+\begin{figure}[htb]
+\centering
+\scalebox{0.6}{
+\begin{tikzpicture}
+    \begin{axis}[
+            ybar,
+            x = 3.5cm,
+            bar width=.5cm,
+            width=\textwidth,
+            height=7cm,
+            legend style={at={(0.5,1)},
+                anchor=north,legend columns=-1},
+            symbolic x coords={TensorFlow, Keras, PyTorch, Scikit-learn},
+            xtick=data,
+            nodes near coords,
+            nodes near coords align={vertical},
+            ymin=0,ymax=2800,
+   %         ylabel={Total amount of open and closed issues},
+        ]
+        \addplot table[x=interval,y=authors]{\montlyinteraction};
+        \addplot table[x=interval,y=master]{\montlyinteraction};
+        \addplot table[x=interval,y=all]{\montlyinteraction};
+        \legend{Authors, Commits to Master branch, Commits to all branch}
+    \end{axis}
+\end{tikzpicture}}
+\caption{Modification Records for four packages(Nov, 2020 - Dec, 2020)}
+\label{3.8.3}
+\end{figure}
+In summary, TensorFlow and PyTorch are more popular frameworks than others, and their friendly community ensure their users can easily get feedback from major developers or other users for the problem they meet.
+\end{frame}
+\section[Conclusions]{Conclusions}
+\begin{frame}{Conclusions}
+\begin{table}[h!]
+\begin{center}
+\scalebox{0.7}{
+\begin{tabularx}{15cm}{p{5cm}XXXX}
+\toprule  
+\diagbox{Rubrics}{Frameworks} & TensorFlow & PyTorch & Keras & Scikit-learn \\
+\midrule   
+Performance                 & 90  & \textbf{100} & 78  & 0  \\ 
+Weight Initialization       & \textbf{100} & 87  & \textbf{100} & 0  \\
+Act./Loss Function Coverage & 48  & \textbf{100} & 48  & 17 \\  % 最高值满分，其余按其值与最高值的比例乘以100计算
+Opt. Method Coverage        & \textbf{100} & \textbf{100} & 64  & 27 \\  % 最高值满分，其余按其值与最高值的比例乘以100计算
+Hardware/Platform Support   & \textbf{100} & 92  & \textbf{100} & 75 \\  % Hardware, Platform各占50%,按上方方法计算出各部分比值后各自除二求和
+Language Support            & \textbf{100} & 60  & 40  & 20 \\  % 最高值满分，其余按其值与最高值的比例乘以100计算
+Usability                   & 31  & 30  & 81  & 55\\  % CNN, MLP, MLP-Regression各占33.3%,上方方法计算出各部分比值后各自除三求和 
+% TF 35 41 16 PyTorch 41 54 26 Keras 43 100 100 Scikit-learn 100 0 64
+Activity of Packages        & \textbf{100} & \textbf{100} & 25  & 50 \\  % tf和torch打满分，Keras打最低分，sklearn中间
+% github issues             &     &     &     &    \\
+Summary                     & \textbf{669} & \textbf{669} & 536 & 244 \\
+Normalized Summary          & \textbf{0.8363} & \textbf{0.8363} & 0.67 & 0.305 \\
+\bottomrule
+\end{tabularx}
+}
+\caption{The grade table for four packages}
+\end{center}
+\end{table}
+We decide to calculate scores for each packages as a direct criterion to judge how packages' performance on different rubrics. And based on scores, analyze which package is the best one on doing machine learn. 
+\end{frame}
+
+\begin{frame}{Summary}
+\begin{columns}[b]
+    \column{0.5\textwidth}
+    For Scikit-learn, it is a very preliminary neural network library, and it cannot provide too many up-to-date features. However, due to its simpleness, it is very suitable for students who are beginner of neural network. For industrial level production, Scikit-learn is not a reasonable package for neural network.
+    \begin{figure}[b]
+    \centering
+    \includegraphics[scale=0.05]{Scikit_learn_logo_small.svg.png}
+    \end{figure}
+    
+    \column{0.5\textwidth}
+    For Keras, it can provide more cutting edge features with users. Compared with TensorFlow and PyTorch, it can construct the same neural network via less codes. This is more suitable for someone who want to exploit the advantages of neural network without firm coding skill. Due to the shortage of developers, it would become a problem about whether Keras would be continuously improving.
+    \begin{figure}[b]
+    \centering
+    \includegraphics[scale=0.05]{Keras.png}
+    \end{figure}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Summary Cont.}
+\begin{columns}[b]
+    \column{0.5\textwidth}
+    For PyTorch, due to the support of FAIR, it can provide the most cutting edge features and neural network models with users. The impressive computing capability for tensor also ensure the model training in a fast and efficient way. The active community provides user-friendly experience with users. For any project which put high priority on performance, the project recommends PyTorch.
+    \begin{figure}[b]
+    \centering
+    \includegraphics[scale=0.01]{PyTorch-logo.png}
+    \end{figure}
+
+    \column{0.5\textwidth}
+    For TensorFlow, the language and platform supports are more comprehensive than other packages. For any project required special language or platform, TensorFlow is the best choice. Since TensorFlow is maintained and developed by Google's teams, it would continuously provide top-to-art research findings with users, which means projects based on TensorFlow can easily switch to up-to-date neural network models. 
+    \begin{figure}[b]
+    \centering
+    \includegraphics[scale=0.017]{TensorFlow.png}
+    \end{figure}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Acknowledgements}
+    The slides are written in \LaTeX \ with theme: \MYhref{https://github.com/matze/mtheme}{Metropolis} and PolyU color scheme from \MYhref{https://github.com/quxiaofeng/PolyU_beamer_theme}{Prof. Qu Xiaofeng}, licensed under \MYhref{http://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons
+  Attribution-ShareAlike 4.0 International License}.
+
+  \begin{center}\ccbysa\end{center}
+
+\end{frame}
+
+\begin{frame}{Contributions}
+\begin{table}[h!]
+\begin{center}
+\begin{tabularx}{11cm}{p{2.8cm}p{1.8cm}X}
+\toprule  
+Name & Student ID & Contributions \\
+\midrule   
+GUO Junpeng\footnote{Standing for group leader} & 20097916G & \tiny{Implement neural network models by PyTorch, write the report part 1, 2.2, 3.8, 4, organize and assign tasks to group members}\\
+ZHAO Shuyu & 20068999G & \tiny{Implement TensorFlow CNN, MLP, MLP Regression, write the representation slides, regulate the format of the report and the slides} \\
+YANG Zunrui & 20073942G & \tiny{Implement Keras CNN, MLP, MLP Regression, summarize language support, write 3.7 in report} \\
+HAO Peide & 20103442G & \tiny{PyTorch CNN\&MLP,Code performs efficiency tests,part 3.1 and 3.2} \\
+CHEN Lu & 20073318G &   \tiny{Implement Scikit-learn MLP and MLP Regression, write 2.4 and 3.7 part in report, write the representation slides}\\
+SUN Xu & 20096765G &  \tiny{Collect the data information about TensorFlow and write 2.1 and 3.4 part in report}\\
+Zhao Jiayi & 20074559G &  \tiny{Literature survey on Keras and write related code annotation, summarize hardware\&platform compatibility, write 2.3\&3.5 in report}\\
+\bottomrule
+\end{tabularx}
+\caption{Group members' contributions}
+\end{center}
+\end{table}
+
+
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{References}
+
+  \bibliography{demo}
+  \bibliographystyle{unsrt}
+
+\end{frame}
+
+% {\setbeamercolor{palette primary}{fg=black, bg=yellow}
+% \begin{frame}[standout]
+%   Questions?
+% \end{frame}
+% }
+
+% \appendix
+% \begin{frame}[fragile]{Backup slides}
+%   Sometimes, it is useful to add slides at the end of your presentation to
+%   refer to during audience questions.
+
+%   The best way to do this is to include the \verb|appendixnumberbeamer|
+%   package in your preamble and call \verb|\appendix| before your backup slides.
+
+%   \themename will automatically turn off slide numbering and progress bars for
+%   slides in the appendix.
+% \end{frame}
+
+
+
+\end{document}
