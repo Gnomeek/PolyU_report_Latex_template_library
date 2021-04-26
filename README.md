@@ -3,7 +3,8 @@
 2. Project proposal template, modified on this [repo](https://github.com/anoopkcn/lazylatex)
 3. slides(beamer) template, modified on this two: [repo](https://github.com/quxiaofeng/PolyU_beamer_theme), [repo](https://github.com/matze/mtheme)
 4. Report template, modified on this [repo](https://github.com/anoopkcn/lazylatex)
-5. thesis template, , see this [repo](https://github.com/quxiaofeng/PolyU_thesis_template)
+5. thesis template, see this [repo](https://github.com/quxiaofeng/PolyU_thesis_template)
+6. Scientific report template, can also be applied on simple report.
 
 # Tips
 - I prefer to write assignment in markdown
