@@ -1,0 +1,106 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage{lazylatex}
+\usepackage[					% use biblatex for bibliography
+% 	backend=\cthesis@bibsys,		% 	- use biber backend (bibtex replacement) or bibtex
+	bibencoding=utf8,				% 	- use auto file encode
+	style=numeric,				% 	- use alphabetic (or numeric) bib style
+	natbib=true,					% 	- allow natbib commands
+	hyperref=true,					% 	- activate hyperref support
+	backref=true,					% 	- activate backrefs
+	isbn=false,						% 	- don't show isbn tags
+	url=false,						% 	- don't show url tags
+	doi=false,						% 	- don't show doi tags
+	urldate=long,					% 	- display type for dates
+	maxnames=3,%
+	minnames=1,%
+	maxbibnames=5,%
+	minbibnames=3,%
+	maxcitenames=2,%
+	mincitenames=1%
+]{biblatex}
+\addbibresource{bibliography.bib}
+\usepackage{amsmath}
+\tcbuselibrary{documentation}
+\usepackage{fontspec}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{pgf-umlsd}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{unicode-math}
+\usepackage{subcaption}
+\setmainfont{Times New Roman}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+% \setlength{\intextsep}{11pt plus 1.0pt minus 2.0pt}
+% \renewcommand{\arraystretch}{1.1}
+\graphicspath{{img/}}
+
+\makeatletter
+\renewenvironment{abstract}{%
+    \if@twocolumn
+      \section*{\abstractname}%
+    \else %% <- here I've removed \small
+      \begin{center}%
+        {\bfseries \Large\abstractname\vspace{\z@}}%  %% <- here I've added \Large
+      \end{center}%
+      \quotation
+    \fi}
+    {\if@twocolumn\else\endquotation\fi}
+\makeatother
+
+\begin{document}
+% Cover page part
+\begin{center}
+    \Large{\textbf{The Hong Kong Polytechnic University}}
+
+    \Large{\textbf{Department of Computing}}
+    \vspace{1cm}
+    
+    \underline{COMP1234 Scientific Report Template}
+    
+    Second title
+    
+    \vspace{4cm}
+    
+    \Huge{\textbf{TITLE}}
+    
+    \vspace*{\fill}
+    \begin{tabular}{ll}
+    \large{Student ID:}& \large{placeholder} \\
+    \large{Programme-Stream Code:}& \large{placeholder} \\
+    \large{Student Name:}& \large{placeholder} \\
+    % \large{Supervisor:}&  \large{Prof. Bin Xiao} \\
+    \large{Submission Date:}& \large{\today} \\
+    \end{tabular}
+\end{center}
+\thispagestyle{empty}
+\newpage
+% End of Cover page part
+
+% Table of contents part
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+% End of table of contents part
+
+% Main Part
+\setcounter{page}{1}
+\begin{abstract}
+\phantomsection
+\addcontentsline{toc}{section}{Abstract}
+% \addcontentsline{toc}{section}{Abstract}
+
+\end{abstract}
+% \clearpage
+\section{A}
+
+\section{Conclusion}
+
+\clearpage
+\printbibliography[
+heading=bibintoc,
+title={References}
+]
+\end{document}
